@@ -16,9 +16,10 @@ require("dotenv").config();
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 
 io.on("connection", (socket) => {
-  socket.on("join-room", ({ roomId, userId, name }) => {
+  socket.on("join-room", ({ roomId, userId, name, color }) => {
+    console.log(color);
     socket.join(roomId);
-    socket.to(roomId).emit("user-connected", { userId, name });
+    socket.to(roomId).emit("user-connected", { userId, name, color });
     socket.on("disconnect", () => {
       socket.to(roomId).emit("user-disconnected", userId);
     });
@@ -41,8 +42,8 @@ app.use(cors());
 
 app.use("/room", require("./routes/room"));
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
-server.listen(process.env.PORT || PORT, () => {
-  console.log("SERVER NOW LISTENING");
+server.listen(PORT, () => {
+  console.log("SERVER NOW LISTENING ON PORT " + PORT);
 });
