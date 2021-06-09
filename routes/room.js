@@ -62,6 +62,7 @@ router.get("/create", createUniqueID, async (req, res) => {
       "language",
       BASE_LANGUAGE
     );
+    await expire(`room:${newID}`, 3600 * HOURS_TILL_EXPIRATION);
     res.json({ roomID: newID });
   } catch (err) {
     console.log(err);
