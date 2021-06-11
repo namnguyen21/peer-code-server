@@ -91,6 +91,9 @@ router.get("/join/:roomID", async (req, res) => {
       const assignedColor = colors[(parseInt(roomInfo.members) % 6) - 1];
       res.json({ ...roomInfo, color: assignedColor });
     }
+    if (doesExist === 0) {
+      res.json({ error: "Invalid room" });
+    }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
