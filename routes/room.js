@@ -88,7 +88,13 @@ router.get("/join/:roomID", async (req, res) => {
     if (doesExist === 1) {
       await hincrby(`room:${roomID}`, "members", 1);
       const roomInfo = await hgetall(`room:${roomID}`);
-      const assignedColor = colors[(parseInt(roomInfo.members) % 6) - 1];
+      let assignedColor;
+      if (parseInt(roomInfo.members) % 6 === 0) {
+        assignedColor = colors[5];
+      } else {
+        assignedColor = colors[(parseInt(roomInfo.members) % 6) - 1];
+      }
+      console.log(roomInfo.members, assignedColor);
       res.json({ ...roomInfo, color: assignedColor });
     }
     if (doesExist === 0) {
